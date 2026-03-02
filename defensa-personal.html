@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clase Muestra de Defensa Personal</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --purple-dark: #2d1b4e;
+    --purple-mid: #6b21a8;
+    --purple-light: #a855f7;
+    --purple-pale: #e9d5ff;
+    --gray-dark: #1a1a2e;
+    --gray-mid: #6b7280;
+    --gray-light: #d1d5db;
+    --white: #faf5ff;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--gray-dark);
+    font-family: 'Montserrat', sans-serif;
+    color: var(--white);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Background */
+  .bg {
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(ellipse at 20% 20%, #4a1570 0%, transparent 55%),
+                radial-gradient(ellipse at 80% 80%, #1e0a38 0%, transparent 55%),
+                linear-gradient(135deg, #0f0f1a 0%, #1a0a2e 50%, #0f0f1a 100%);
+    z-index: 0;
+  }
+
+  /* Geometric decorations */
+  .geo {
+    position: fixed;
+    border: 1px solid rgba(168,85,247,0.15);
+    border-radius: 50%;
+    z-index: 0;
+    pointer-events: none;
+  }
+  .geo-1 { width: 600px; height: 600px; top: -200px; left: -200px; animation: rotate 30s linear infinite; }
+  .geo-2 { width: 400px; height: 400px; bottom: -150px; right: -100px; animation: rotate 20s linear infinite reverse; }
+  .geo-3 { width: 200px; height: 200px; top: 50%; left: 50%; transform: translate(-50%,-50%); border-color: rgba(168,85,247,0.08); }
+
+  @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+  /* Main container */
+  .container {
+    position: relative;
+    z-index: 1;
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 40px 20px 60px;
+    text-align: center;
+  }
+
+  /* Legend badge */
+  .legend {
+    display: inline-block;
+    border: 1px solid var(--purple-light);
+    color: var(--purple-pale);
+    font-size: 0.7rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    padding: 8px 24px;
+    border-radius: 100px;
+    margin-bottom: 32px;
+    backdrop-filter: blur(4px);
+    background: rgba(107,33,168,0.15);
+    animation: fadeIn 1s ease both;
+  }
+
+  /* Ornamental divider */
+  .ornament {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin: 20px auto;
+    color: var(--purple-light);
+    opacity: 0.6;
+    font-size: 1rem;
+  }
+  .ornament::before, .ornament::after {
+    content: '';
+    flex: 1;
+    max-width: 80px;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--purple-light));
+  }
+  .ornament::after { background: linear-gradient(to left, transparent, var(--purple-light)); }
+
+  /* Main title */
+  .title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.2rem, 8vw, 4rem);
+    font-weight: 900;
+    line-height: 1.05;
+    background: linear-gradient(135deg, #fff 0%, #d8b4fe 40%, #a855f7 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 8px;
+    animation: fadeUp 1s ease 0.3s both;
+  }
+
+  .subtitle-tag {
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--purple-light);
+    margin-bottom: 40px;
+    animation: fadeUp 1s ease 0.5s both;
+  }
+
+  /* Instructors section */
+  .impartida-label {
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gray-mid);
+    margin-bottom: 20px;
+    animation: fadeUp 1s ease 0.6s both;
+  }
+
+  .instructors {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-bottom: 40px;
+    animation: fadeUp 1s ease 0.7s both;
+  }
+
+  .instructor-card {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(168,85,247,0.2);
+    border-radius: 16px;
+    padding: 16px 20px;
+    backdrop-filter: blur(8px);
+    text-align: left;
+    transition: border-color 0.3s, background 0.3s;
+  }
+  .instructor-card:hover {
+    border-color: rgba(168,85,247,0.5);
+    background: rgba(107,33,168,0.1);
+  }
+
+  .instructor-avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #833ab4, #fd1d1d, #fcb045);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+    flex-shrink: 0;
+    position: relative;
+  }
+  .instructor-avatar::after {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #833ab4, #fd1d1d, #fcb045);
+    z-index: -1;
+  }
+  .instructor-avatar-inner {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: var(--gray-dark);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+  }
+
+  .instructor-info { flex: 1; }
+
+  .instructor-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 4px;
+  }
+
+  .ig-handle {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.75rem;
+    color: var(--purple-light);
+    text-decoration: none;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    transition: color 0.2s;
+  }
+  .ig-handle:hover { color: #d8b4fe; }
+
+  .ig-logo {
+    width: 16px;
+    height: 16px;
+    display: inline-block;
+    vertical-align: middle;
+  }
+
+  /* Info cards */
+  .info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-bottom: 40px;
+    animation: fadeUp 1s ease 0.9s both;
+  }
+
+  .info-card {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(168,85,247,0.2);
+    border-radius: 14px;
+    padding: 20px 16px;
+    backdrop-filter: blur(8px);
+  }
+
+  .info-icon { font-size: 1.6rem; margin-bottom: 8px; }
+  .info-label {
+    font-size: 0.6rem;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--gray-mid);
+    margin-bottom: 4px;
+  }
+  .info-value {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--white);
+    line-height: 1.3;
+  }
+  .info-value span {
+    color: var(--purple-light);
+  }
+
+  /* CTA ribbon */
+  .cta-ribbon {
+    background: linear-gradient(135deg, rgba(107,33,168,0.6), rgba(45,27,78,0.8));
+    border: 1px solid rgba(168,85,247,0.4);
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 32px;
+    animation: fadeUp 1s ease 1.1s both;
+  }
+
+  .cta-text {
+    font-size: 0.8rem;
+    color: var(--purple-pale);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  /* Footer */
+  .footer {
+    font-size: 0.65rem;
+    color: rgba(255,255,255,0.25);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    animation: fadeIn 2s ease 1.5s both;
+  }
+
+  /* Animations */
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* Venus symbol decoration */
+  .venus-symbol {
+    font-size: 3rem;
+    color: var(--purple-light);
+    opacity: 0.15;
+    position: fixed;
+    top: 40px;
+    right: 40px;
+    z-index: 0;
+    user-select: none;
+    animation: float 4s ease-in-out infinite;
+  }
+  @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+
+  /* Glitter particles */
+  .particles {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+  }
+  .particle {
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    background: var(--purple-light);
+    border-radius: 50%;
+    animation: twinkle var(--d) ease-in-out infinite var(--del);
+    opacity: 0;
+  }
+  @keyframes twinkle { 0%,100% { opacity: 0; } 50% { opacity: 0.7; } }
+</style>
+</head>
+<body>
+
+<div class="bg"></div>
+<div class="geo geo-1"></div>
+<div class="geo geo-2"></div>
+<div class="geo geo-3"></div>
+<div class="venus-symbol">♀</div>
+
+<!-- Particles -->
+<div class="particles" id="particles"></div>
+
+<div class="container">
+
+  <!-- Legend -->
+  <div class="legend">✦ Día Conmemorativo a la Mujer · 8 de Marzo ✦</div>
+
+  <!-- Ornament -->
+  <div class="ornament">♦</div>
+
+  <!-- Main title -->
+  <h1 class="title">Clase Muestra<br>de Defensa<br>Personal</h1>
+  <p class="subtitle-tag">Empoderamiento · Seguridad · Fuerza</p>
+
+  <!-- Instructors -->
+  <p class="impartida-label">Impartida por</p>
+  <div class="instructors">
+
+    <div class="instructor-card">
+      <div class="instructor-avatar">
+        <div class="instructor-avatar-inner">🥋</div>
+      </div>
+      <div class="instructor-info">
+        <div class="instructor-name">Karla Christiane Torres Suárez</div>
+        <a href="https://www.instagram.com/kchristiane_srz" target="_blank" class="ig-handle">
+          <svg class="ig-logo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+          </svg>
+          @kchristiane_srz
+        </a>
+      </div>
+    </div>
+
+    <div class="instructor-card">
+      <div class="instructor-avatar">
+        <div class="instructor-avatar-inner">🥊</div>
+      </div>
+      <div class="instructor-info">
+        <div class="instructor-name">Carlos "Sensei" Torres</div>
+        <a href="https://www.instagram.com/carlossenseitorres" target="_blank" class="ig-handle">
+          <svg class="ig-logo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+          </svg>
+          @carlossenseitorres
+        </a>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Info grid -->
+  <div class="info-grid">
+    <div class="info-card">
+      <div class="info-icon">📅</div>
+      <div class="info-label">Fecha</div>
+      <div class="info-value">Jueves<br><span>05 de Marzo</span></div>
+    </div>
+    <div class="info-card">
+      <div class="info-icon">🕙</div>
+      <div class="info-label">Hora</div>
+      <div class="info-value"><span>11:00 am</span></div>
+    </div>
+    <div class="info-card" style="grid-column: 1/-1;">
+      <div class="info-icon">📍</div>
+      <div class="info-label">Lugar</div>
+      <div class="info-value">Afuera del <span>Aula Magna</span></div>
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <div class="cta-ribbon">
+    <div class="info-icon" style="font-size:2rem;margin-bottom:8px;">👊</div>
+    <p class="cta-text">¡Todas las mujeres están invitadas!<br>Entrada libre · Ven y defiéndete</p>
+  </div>
+
+  <p class="footer">En conmemoración al Día Internacional de la Mujer · 8 de Marzo</p>
+
+</div>
+
+<script>
+  // Generate particles
+  const container = document.getElementById('particles');
+  for (let i = 0; i < 40; i++) {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    p.style.left = Math.random() * 100 + '%';
+    p.style.top = Math.random() * 100 + '%';
+    p.style.setProperty('--d', (3 + Math.random() * 5) + 's');
+    p.style.setProperty('--del', (Math.random() * 5) + 's');
+    if (Math.random() > 0.5) { p.style.background = '#d8b4fe'; }
+    container.appendChild(p);
+  }
+</script>
+</body>
+</html>
